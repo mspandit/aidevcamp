@@ -10,7 +10,7 @@ from __future__ import print_function
 import argparse
 import sys
 
-from tensorflow.examples.tutorials.mnist import input_data
+from dataset import MnistDataset
 
 import tensorflow as tf
 
@@ -49,11 +49,11 @@ class Model(object):
 
     def train(self, session, data):
         for _ in range(1000):
-            batch_inputs, batch_targets = data.next_batch(100)
+            batch_images, batch_labels = data.next_batch(100)
             session.run(
                 self.train_step, feed_dict={
-                    self.x: batch_inputs, 
-                    self.y_: batch_targets})
+                    self.x: batch_images, 
+                    self.y_: batch_labels})
 
     def test(self, session, data):
         return session.run(
@@ -97,7 +97,7 @@ class DeviceManager(object):
                 
 def main(_):
   # Import data
-  mnist = input_data.read_data_sets(FLAGS.data_dir)
+  mnist = MnistDataset(FLAGS.data_dir)
   model = Model()
   sess = dm.get_session()
   model.train(sess, mnist.train)
