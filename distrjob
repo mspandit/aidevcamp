@@ -1,0 +1,5 @@
+#PBS -l nodes=2:skl
+cd $PBS_O_WORKDIR
+echo Launching the parallel job from mother superior `hostname` to the following nodes...
+cat $PBS_NODEFILE
+mpirun -machinefile $PBS_NODEFILE python mnist_softmax_clustered.py --machinefile "`cat $PBS_NODEFILE`"

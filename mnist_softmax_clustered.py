@@ -13,6 +13,7 @@ import sys
 from dataset import MnistDataset
 
 import tensorflow as tf
+import socket
 
 FLAGS = None
 
@@ -107,6 +108,9 @@ def main(_):
 
 tf.set_random_seed(10059741)
 
+def node_list(filename):
+    return ["%s:3000" % node for node in filename.split("\n")]
+
 if __name__ == '__main__':
   parser = argparse.ArgumentParser()
   parser.add_argument(
@@ -117,6 +121,12 @@ if __name__ == '__main__':
   parser.add_argument(
       '--as_node',
       type=str)
+  parser.add_argument(
+      '--machinefile',
+      type=str)
   FLAGS, unparsed = parser.parse_known_args()
-  dm = DeviceManager(["localhost:2222", "localhost:2223"], FLAGS.as_node)
+  if FLAGS.machinefile is None:
+      dm = DeviceManager(["localhost:2222", "localhost:2223"], FLAGS.as_node)
+  else:
+      dm = DeviceManager(node_list(FLAGS.machinefile), "%s:3000" % socket.gethostname())
   tf.app.run(main=main, argv=[sys.argv[0]] + unparsed)
