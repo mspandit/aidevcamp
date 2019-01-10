@@ -95,8 +95,10 @@ class DeviceManager(object):
         else:
             device = tf.device("/job:localhost/replica:0/task:0/device:CPU:0")
         return device
-                
+
+import time                
 def main(_):
+  start_time = time.time()
   # Import data
   mnist = MnistDataset(FLAGS.data_dir)
   model = Model()
@@ -104,7 +106,9 @@ def main(_):
   model.train(sess, mnist.train)
 
   # Test trained model
-  print(model.test(sess, mnist.test))
+  result = model.test(sess, mnist.test)
+  end_time = time.time()
+  print("%0.2f percent accuracy in %d ms." % (result, end_time - start_time))
 
 tf.set_random_seed(10059741)
 
