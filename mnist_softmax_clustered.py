@@ -108,7 +108,7 @@ def main(_):
   # Test trained model
   result = model.test(sess, mnist.test)
   end_time = time.time()
-  print("%0.2f percent accuracy in %d ms." % (result, end_time - start_time))
+  print("%0.2f percent accuracy in %d ms." % (result * 100, end_time - start_time))
 
 tf.set_random_seed(10059741)
 
